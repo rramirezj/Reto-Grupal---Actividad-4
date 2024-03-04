@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmo Schools - Sistema interactivo de preguntas</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.titulo {
+    text-align: center;
+    color: #333;
+}
+
+.pregunta {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.respuestaInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.boton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.boton:hover {
+    background-color: #45a049;
+}
+
+.comentario {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.resultado {
+    font-size: 18px;
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<div class="contenedor">
+    <h1 class="titulo">Cosmo Schools - Sistema interactivo de preguntas</h1>
+    <div class="pregunta" id="pregunta"></div>
+    <div id="opcionesRespuesta"></div>
+    <button class="boton" onclick="verificarRespuesta()">Comprobar respuesta</button>
+    <div class="comentario" id="comentario"></div>
+    <div class="resultado" id="resultado" style="display: none;"></div>
+</div>
+
+<script>
+const preguntas = [
+    // Suma
+    { pregunta: '¿Cuánto es 2 + 2?', opciones: ['3', '4', '5', '6'], respuesta: '4', tipo: 'suma' },
+    { pregunta: '¿Cuánto es 5 + 3?', opciones: ['7', '8', '9', '10'], respuesta: '8', tipo: 'suma' },
+    { pregunta: '¿Cuánto es 10 + 7?', opciones: ['15', '16', '17', '18'], respuesta: '17', tipo: 'suma' },
+    { pregunta: '¿Cuánto es 8 + 6?', opciones: ['12', '13', '14', '15'], respuesta: '14', tipo: 'suma' },
+    { pregunta: '¿Cuánto es 3 + 9?', opciones: ['10', '11', '12', '13'], respuesta: '12', tipo: 'suma' },
+    // Resta
+    { pregunta: '¿Cuánto es 5 - 3?', opciones: ['1', '2', '3', '4'], respuesta: '2', tipo: 'resta' },
+    { pregunta: '¿Cuánto es 10 - 7?', opciones: ['1', '2', '3', '4'], respuesta: '3', tipo: 'resta' },
+    { pregunta: '¿Cuánto es 8 - 6?', opciones: ['1', '2', '3', '4'], respuesta: '2', tipo: 'resta' },
+    { pregunta: '¿Cuánto es 15 - 9?', opciones: ['5', '6', '7', '8'], respuesta: '6', tipo: 'resta' },
+    { pregunta: '¿Cuánto es 20 - 12?', opciones: ['6', '7', '8', '9'], respuesta: '8', tipo: 'resta' },
+    // Multiplicación
+    { pregunta: '¿Cuánto es 3 * 4?', opciones: ['9', '10', '11', '12'], respuesta: '12', tipo: 'multiplicación' },
+    { pregunta: '¿Cuánto es 5 * 6?', opciones: ['25', '30', '35', '40'], respuesta: '30', tipo: 'multiplicación' },
+    { pregunta: '¿Cuánto es 7 * 8?', opciones: ['48', '52', '56', '60'], respuesta: '56', tipo: 'multiplicación' },
+    { pregunta: '¿Cuánto es 9 * 2?', opciones: ['15', '16', '18', '20'], respuesta: '18', tipo: 'multiplicación' },
+    { pregunta: '¿Cuánto es 4 * 10?', opciones: ['30', '35', '40', '45'], respuesta: '40', tipo: 'multiplicación' },
+    // División
+    { pregunta: '¿Cuánto es 8 / 2?', opciones: ['2', '3', '4', '5'], respuesta: '4', tipo: 'división' },
+    { pregunta: '¿Cuánto es 18 / 3?', opciones: ['4', '5', '6', '7'], respuesta: '6', tipo: 'división' },
+    { pregunta: '¿Cuánto es 30 / 5?', opciones: ['4', '5', '6', '7'], respuesta: '6', tipo: 'división' },
+    { pregunta: '¿Cuánto es 42 / 6?', opciones: ['6', '7', '8', '9'], respuesta: '7', tipo: 'división' },
+    { pregunta: '¿Cuánto es 63 / 9?', opciones: ['6', '7', '8', '9'], respuesta: '7', tipo: 'división' }
+];
+
+let indicePreguntaActual = 0;
+let respuestasCorrectas = {
+    suma: 0,
+    resta: 0,
+    multiplicación: 0,
+    división: 0
+};
+let respuestasIncorrectas = {
+    suma: 0,
+    resta: 0,
+    multiplicación: 0,
+    división: 0
+};
+
+function mostrarPregunta() {
+    const preguntaActual = preguntas[indicePreguntaActual];
+    document.getElementById('pregunta').innerText = preguntaActual.pregunta;
+    
+    const opcionesHTML = preguntaActual.opciones.map(opcion => `<input type="radio" name="opcion" value="${opcion}">${opcion}<br>`).join('');
+    document.getElementById('opcionesRespuesta').innerHTML = opcionesHTML;
+}
+
+function verificarRespuesta() {
+    const respuestaUsuario = document.querySelector('input[name="opcion"]:checked');
+    if (!respuestaUsuario) {
+        alert("Por favor, selecciona una respuesta.");
+        return;
+    }
+    
+    const respuestaSeleccionada = respuestaUsuario.value;
+    const respuestaCorrecta = preguntas[indicePreguntaActual].respuesta;
+    const tipoPregunta = preguntas[indicePreguntaActual].tipo;
+
+    if (respuestaSeleccionada === respuestaCorrecta) {
+        document.getElementById('comentario').innerText = "¡Correcto!";
+        respuestasCorrectas[tipoPregunta]++;
+    } else {
+        document.getElementById('comentario').innerText = "Incorrecto. La respuesta correcta es: " + respuestaCorrecta;
+        respuestasIncorrectas[tipoPregunta]++;
+    }
+
+    document.getElementById('comentario').style.display = 'block';
+
+    setTimeout(function() {
+        document.getElementById('comentario').style.display = 'none';
+        indicePreguntaActual++;
+        if (indicePreguntaActual < preguntas.length) {
+            mostrarPregunta();
+        } else {
+            mostrarResultado();
+        }
+    }, 1500);
+}
+
+function mostrarResultado() {
+    document.getElementById('pregunta').style.display = 'none';
+    document.getElementById('opcionesRespuesta').style.display = 'none';
+
+    const resultadoElemento = document.getElementById('resultado');
+    resultadoElemento.style.display = 'block';
+
+    let mensaje = "¡Bien hecho! Has completado todas las preguntas.\n\n";
+
+    for (let tipo in respuestasCorrectas) {
+        const correctas = respuestasCorrectas[tipo];
+        const incorrectas = respuestasIncorrectas[tipo];
+        const total = correctas + incorrectas;
+
+        mensaje += `Para ${tipo}, tienes ${correctas} respuestas correctas de ${total} (${((correctas / total) * 100).toFixed(2)}%).\n`;
+    }
+
+    resultadoElemento.innerText = mensaje;
+}
+
+mostrarPregunta();
+</script>
+</body>
+</html>
