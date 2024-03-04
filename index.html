@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cosmo Schools - Sistema interactivo de preguntas</title>
+
 <style>
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -15,10 +17,10 @@ body {
 .contenedor {
     max-width: 600px;
     margin: 50px auto;
-    background-color: #fff;
+    background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px black;
 }
 
 .titulo {
@@ -68,20 +70,27 @@ body {
     font-size: 18px;
     margin-top: 20px;
 }
+
 </style>
+
 </head>
+
 <body>
+
 <div class="contenedor">
-    <h1 class="titulo">Cosmo Schools - Sistema interactivo de preguntas</h1>
+
+    <h1 class="titulo">Cosmo Schools - Sistema Interactivo de Preguntas de Matemáticas</h1>
     <div class="pregunta" id="pregunta"></div>
     <div id="opcionesRespuesta"></div>
     <div style="margin-bottom: 10px;"></div> <!-- Espacio añadido -->
     <button class="boton" onclick="verificarRespuesta()">Comprobar respuesta</button>
     <div class="comentario" id="comentario"></div>
     <div class="resultado" id="resultado" style="display: none;"></div>
+
 </div>
 
 <script>
+
 const preguntas = [
     // Suma
     { pregunta: '¿Cuánto es 2 + 2?', opciones: ['3', '4', '5', '6'], respuesta: '4', tipo: 'suma' },
@@ -199,6 +208,9 @@ function mostrarResultado() {
 }
 
 mostrarPregunta();
+
 </script>
+
 </body>
+
 </html>
