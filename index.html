@@ -75,6 +75,7 @@ body {
     <h1 class="titulo">Cosmo Schools - Sistema interactivo de preguntas</h1>
     <div class="pregunta" id="pregunta"></div>
     <div id="opcionesRespuesta"></div>
+    <div style="margin-bottom: 10px;"></div> <!-- Espacio añadido -->
     <button class="boton" onclick="verificarRespuesta()">Comprobar respuesta</button>
     <div class="comentario" id="comentario"></div>
     <div class="resultado" id="resultado" style="display: none;"></div>
@@ -175,8 +176,23 @@ function mostrarResultado() {
         const correctas = respuestasCorrectas[tipo];
         const incorrectas = respuestasIncorrectas[tipo];
         const total = correctas + incorrectas;
+        const porcentaje = (correctas / total) * 100;
 
-        mensaje += `Para ${tipo}, tienes ${correctas} respuestas correctas de ${total} (${((correctas / total) * 100).toFixed(2)}%).\n`;
+        let nota = '';
+        if (porcentaje === 100) {
+            nota = 'Excelente';
+        } else if (porcentaje >= 80) {
+            nota = 'Sobresaliente';
+        } else if (porcentaje >= 60) {
+            nota = 'Aceptable';
+        } else if (porcentaje >= 40) {
+            nota = 'Insuficiente';
+        } else {
+            nota = 'Deficiente';
+        }
+
+        mensaje += `Para ${tipo}, tienes ${correctas} respuestas correctas de ${total} (${porcentaje.toFixed(2)}%)\n`;
+        mensaje += `Nota: ${nota}\n\n`;
     }
 
     resultadoElemento.innerText = mensaje;
