@@ -7,13 +7,16 @@
 
 <style>
 
+/* Estilos de la página */
+
+/* Estilos del cuerpo de la página */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
 }
-
+/* Estilos del contenedor principal */
 .contenedor {
     max-width: 600px;
     margin: 50px auto;
@@ -23,26 +26,30 @@ body {
     box-shadow: 0 4px 8px black;
 }
 
+/* Estilos del título */
 .titulo {
     text-align: center;
     color: #333;
 }
 
+/* Estilos de la pregunta */
 .pregunta {
     font-size: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
+/* Estilos de las posibles respuestas */
 .respuestaInput {
     width: 100%;
     padding: 10px;
     font-size: 16px;
     margin-bottom: 10px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
+    border: 1px solid gray;
     border-radius: 4px;
 }
 
+/* Estilos del botón "Comprobar respuesta" */
 .boton {
     background-color: #4CAF50;
     color: white;
@@ -55,10 +62,12 @@ body {
     transition: background-color 0.3s;
 }
 
+/* Estilos del botón "Comprobar respuesta" al pasar el cursor */
 .boton:hover {
     background-color: #45a049;
 }
 
+/* Estilos del comentario */
 .comentario {
     font-size: 18px;
     font-weight: bold;
@@ -66,6 +75,7 @@ body {
     text-align: center;
 }
 
+/* Estilos del resultado */
 .resultado {
     font-size: 18px;
     margin-top: 20px;
@@ -80,22 +90,26 @@ body {
 <div class="contenedor">
 
     <h1 class="titulo">Cosmo Schools - Sistema Interactivo de Preguntas de Matemáticas</h1>
-   
+
+    <!-- Contenedor de la pregunta, las posibles respuestas, el botón "Comprobar respuesta", el comentario y el resultado -->
     <div class="pregunta" id="pregunta"></div>
     <div id="opcionesRespuesta"></div>
     <div style="margin-bottom: 10px;"></div> <!-- Margen añadido para separar la última posible respuesta del botón "Comprobar respuesta"-->
     <button class="boton" onclick="verificarRespuesta()">Comprobar respuesta</button>
-    
+
+    <!-- Comentario que se mostrará después de que el usuario seleccione una respuesta -->
     <div class="comentario" id="comentario"></div>
 
+    <!-- Resultado que se mostrará después de que el usuario haya completado todas las preguntas -->
     <div class="resultado" id="resultado" style="display: none;"></div>
 
 </div>
 
 <script>
 
-// Array de preguntas con sus posibles respuestas y la respuesta correcta
+// Array de preguntas con sus posibles respuestas, la respuesta correcta y el tipo de pregunta (+, -, *, /)
 const preguntas = [
+
     // Suma
     { pregunta: '¿Cuánto es 2 + 2?', opciones: ['3', '4', '5', '6'], respuesta: '4', tipo: 'suma' },
     { pregunta: '¿Cuánto es 5 + 3?', opciones: ['7', '8', '9', '10'], respuesta: '8', tipo: 'suma' },
@@ -120,6 +134,7 @@ const preguntas = [
     { pregunta: '¿Cuánto es 30 / 5?', opciones: ['4', '5', '6', '7'], respuesta: '6', tipo: 'división' },
     { pregunta: '¿Cuánto es 42 / 6?', opciones: ['6', '7', '8', '9'], respuesta: '7', tipo: 'división' },
     { pregunta: '¿Cuánto es 63 / 9?', opciones: ['6', '7', '8', '9'], respuesta: '7', tipo: 'división' }
+
 ];
 
 // Variable que se utilizará para llevar el control de la pregunta actual
