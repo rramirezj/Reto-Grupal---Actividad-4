@@ -122,10 +122,10 @@ const preguntas = [
     { pregunta: '¿Cuánto es 63 / 9?', opciones: ['6', '7', '8', '9'], respuesta: '7', tipo: 'división' }
 ];
 
-// Variables que se utilizarán para llevar el control de la pregunta actual
+// Variable que se utilizará para llevar el control de la pregunta actual
 let indicePreguntaActual = 0;
 
-// Variables que se utilizarán para llevar el control de las respuestas correctas
+// Variable que se utilizará para llevar el control de las respuestas correctas
 let respuestasCorrectas = {
     suma: 0,
     resta: 0,
@@ -133,7 +133,7 @@ let respuestasCorrectas = {
     división: 0
 };
 
-// Variables que se utilizarán para llevar el control de las respuestas incorrectas
+// Variable que se utilizará para llevar el control de las respuestas incorrectas
 let respuestasIncorrectas = {
     suma: 0,
     resta: 0,
@@ -231,7 +231,7 @@ function mostrarResultado() {
         } else {
             nota = 'Deficiente';
         }
-        
+
         // Se muestra el mensaje con el número de respuestas correctas para cada tipo de pregunta, el porcentaje de aciertos y la nota final
         mensaje += `Para ${tipo}, tienes ${correctas} respuestas correctas de ${total} (${porcentaje.toFixed(2)}%)\n`;
         mensaje += `Nota: ${nota}\n\n`;
