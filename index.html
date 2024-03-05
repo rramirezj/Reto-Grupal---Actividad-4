@@ -80,17 +80,21 @@ body {
 <div class="contenedor">
 
     <h1 class="titulo">Cosmo Schools - Sistema Interactivo de Preguntas de Matemáticas</h1>
+   
     <div class="pregunta" id="pregunta"></div>
     <div id="opcionesRespuesta"></div>
-    <div style="margin-bottom: 10px;"></div> <!-- Espacio añadido -->
+    <div style="margin-bottom: 10px;"></div> <!-- Margen añadido para separar la última posible respuesta del botón "Comprobar respuesta"-->
     <button class="boton" onclick="verificarRespuesta()">Comprobar respuesta</button>
+    
     <div class="comentario" id="comentario"></div>
+
     <div class="resultado" id="resultado" style="display: none;"></div>
 
 </div>
 
 <script>
 
+// Array de preguntas con sus posibles respuestas y la respuesta correcta
 const preguntas = [
     // Suma
     { pregunta: '¿Cuánto es 2 + 2?', opciones: ['3', '4', '5', '6'], respuesta: '4', tipo: 'suma' },
@@ -118,13 +122,18 @@ const preguntas = [
     { pregunta: '¿Cuánto es 63 / 9?', opciones: ['6', '7', '8', '9'], respuesta: '7', tipo: 'división' }
 ];
 
+// Variables que se utilizarán para llevar el control de la pregunta actual
 let indicePreguntaActual = 0;
+
+// Variables que se utilizarán para llevar el control de las respuestas correctas
 let respuestasCorrectas = {
     suma: 0,
     resta: 0,
     multiplicación: 0,
     división: 0
 };
+
+// Variables que se utilizarán para llevar el control de las respuestas incorrectas
 let respuestasIncorrectas = {
     suma: 0,
     resta: 0,
@@ -132,25 +141,37 @@ let respuestasIncorrectas = {
     división: 0
 };
 
+// Función que muestra la pregunta actual y sus posibles respuestas
 function mostrarPregunta() {
+
+    // Se obtiene la "pregunta actual" del array "preguntas" y se añade el código HTML al div "pregunta", lo que muestra la pregunta en la pantalla
     const preguntaActual = preguntas[indicePreguntaActual];
     document.getElementById('pregunta').innerText = preguntaActual.pregunta;
-    
+
+    // Se pasa el texto escrito en el código JavaScript a HTML y se añade al div "opcionesRespuesta", lo que muestra las posibles respuestas en la pantalla
     const opcionesHTML = preguntaActual.opciones.map(opcion => `<input type="radio" name="opcion" value="${opcion}">${opcion}<br>`).join('');
     document.getElementById('opcionesRespuesta').innerHTML = opcionesHTML;
 }
-
+// Función que verifica si el usuario ha seleccionado una respuesta y si es correcta o no
 function verificarRespuesta() {
+
+    // Se obtiene la respuesta seleccionada por el usuario y si le da click en "Comprobar respuesta" sin haber seleccionado nada se le mostrará un mensaje de alerta
     const respuestaUsuario = document.querySelector('input[name="opcion"]:checked');
     if (!respuestaUsuario) {
         alert("Por favor, selecciona una respuesta.");
         return;
     }
     
+    // Se obtiene la respuesta seleccionada por el usuario
     const respuestaSeleccionada = respuestaUsuario.value;
+
+    // Se obtiene la respuesta correcta de la pregunta actual
     const respuestaCorrecta = preguntas[indicePreguntaActual].respuesta;
+    
+    // Se obtiene el tipo de pregunta actual (ya sea suma, resta, multiplicación o división)
     const tipoPregunta = preguntas[indicePreguntaActual].tipo;
 
+    // Se muestra el mensaje "Correcto" o "Incorrecto" dentro del contenedor, según si la respuesta seleccionada es correcta o no
     if (respuestaSeleccionada === respuestaCorrecta) {
         document.getElementById('comentario').innerText = "¡Correcto!";
         respuestasCorrectas[tipoPregunta]++;
@@ -159,8 +180,10 @@ function verificarRespuesta() {
         respuestasIncorrectas[tipoPregunta]++;
     }
 
+    // Se configura el comentario para que se muestre en la pantalla mediante el atributo "display:block" de CSS
     document.getElementById('comentario').style.display = 'block';
 
+    // Se añade un tiempo de espera de 1.5 segundos antes de pasar a la siguiente pregunta
     setTimeout(function() {
         document.getElementById('comentario').style.display = 'none';
         indicePreguntaActual++;
@@ -172,21 +195,30 @@ function verificarRespuesta() {
     }, 1500);
 }
 
+// Función que muestra el resultado final
 function mostrarResultado() {
+
+    // Se ocultan las preguntas y sus posibles respuestas, mediante el atributo "display:none" de CSS, para dar paso al resultado
     document.getElementById('pregunta').style.display = 'none';
     document.getElementById('opcionesRespuesta').style.display = 'none';
 
+    // Se muestra el resultado final
     const resultadoElemento = document.getElementById('resultado');
+
+    // Se configura el resultado para que se muestre en la pantalla mediante el atributo "display:block" de CSS
     resultadoElemento.style.display = 'block';
 
+    // Se muestra el mensaje de felicitación y se muestra el resultado final
     let mensaje = "¡Bien hecho! Has completado todas las preguntas.\n\n";
 
+    // Se recorre el objeto "respuestasCorrectas" para mostrar el número de respuestas correctas y el porcentaje de aciertos
     for (let tipo in respuestasCorrectas) {
         const correctas = respuestasCorrectas[tipo];
         const incorrectas = respuestasIncorrectas[tipo];
         const total = correctas + incorrectas;
         const porcentaje = (correctas / total) * 100;
 
+        // Se muestra un mensaje según el porcentaje de aciertos
         let nota = '';
         if (porcentaje === 100) {
             nota = 'Excelente';
@@ -199,7 +231,8 @@ function mostrarResultado() {
         } else {
             nota = 'Deficiente';
         }
-
+        
+        // Se muestra el mensaje con el número de respuestas correctas para cada tipo de pregunta, el porcentaje de aciertos y la nota final
         mensaje += `Para ${tipo}, tienes ${correctas} respuestas correctas de ${total} (${porcentaje.toFixed(2)}%)\n`;
         mensaje += `Nota: ${nota}\n\n`;
     }
@@ -207,6 +240,7 @@ function mostrarResultado() {
     resultadoElemento.innerText = mensaje;
 }
 
+// Se llama a la función "mostrarPregunta" para que muestre la primera pregunta (y subsecuentes) en la pantalla
 mostrarPregunta();
 
 </script>
